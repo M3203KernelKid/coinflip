@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Coin Flip</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #cad2ff;
+        }
+
+        .container {
+            background-color: #f0f0f0;
+            padding: 30px;
+            border-radius: 10px;
+            width: 300px;
+            margin: 0 auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .coin {
+            width: 120px;
+            height: 120px;
+            background: #ffe88d;
+            border-radius: 50%;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #a676ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #925cef;
+        }
+
+        .counter {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #444;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #ccc;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Coin Flip</h1>
+        <div class="coin" id="coin">Ready</div>
+        <button id="btn">Flip</button>
+        <p id="result"></p>
+        
+        <div class="counter">
+            <div>Heads: <span id="heads-count">0</span></div>
+            <div>Tails: <span id="tails-count">0</span></div>
+        </div>
+    </div>
+
+    <script>
+        let heads = 0;
+        let tails = 0;
+
+        document.getElementById("btn").addEventListener("click", function() {
+        
+            let outcome = Math.random() < 0.5 ? "Heads" : "Tails";
+            
+            if (outcome === "Heads") {
+                heads++;
+                document.getElementById("heads-count").textContent = heads;
+            } else {
+                tails++;
+                document.getElementById("tails-count").textContent = tails;
+            }
+
+            document.getElementById("coin").textContent = outcome;
+            document.getElementById("result").textContent = `It's ${outcome}!`;
+        });
+    </script>
+
+</body>
+</html>
