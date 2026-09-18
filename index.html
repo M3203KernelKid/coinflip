@@ -5,97 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coin Flip Simulator</title>
     <style>
-        :root {
-            --bg-color: #cad2ff;
-            --container-bg: #f0f0f0;
-            --coin-bg: #ffe88d;
-            --btn-color: #a676ff;
-            --btn-hover: #925cef;
-            --text-color: #333;
-        }
-
         body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
             text-align: center;
             margin: 0;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: var(--bg-color);
+            background-color: #cad2ff;
         }
 
         .container {
-            background-color: var(--container-bg);
+            background-color: #f0f0f0;
             padding: 30px;
-            border-radius: 12px;
+            border-radius: 0; /* Sharp edges for the box */
             width: 300px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            transition: opacity 0.4s ease, transform 0.4s ease;
-        }
-
-        /* Intro Screen Styles */
-        .intro-screen {
-            position: absolute;
-            background: var(--container-bg);
-            padding: 40px 30px;
-            border-radius: 12px;
-            width: 300px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            z-index: 10;
-            transition: opacity 0.4s ease, transform 0.4s ease;
-        }
-
-        .intro-screen h1 {
-            font-size: 26px;
-            margin-bottom: 10px;
-            color: var(--text-color);
-        }
-
-        .intro-screen p {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 25px;
-        }
-
-        /* Utility class to hide elements gracefully */
-        .hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transform: scale(0.95);
         }
 
         .coin {
-            width: 120px;
-            height: 120px;
-            background: var(--coin-bg);
-            border-radius: 50%;
+            width: 140px;
+            height: 140px;
             margin: 20px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--text-color);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-            transition: background-color 0.2s ease; 
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            background-color: #e6e6e6;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25), inset 0 2px 5px rgba(255, 255, 255, 0.6);
+            border: 4px solid #d4d4d4;
         }
 
         button {
             padding: 10px 24px;
             font-size: 16px;
             font-weight: 600;
-            background: var(--btn-color);
+            background: #a676ff;
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 0; /* Sharp edges for the button */
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: background 0.2s;
         }
 
         button:hover {
-            background: var(--btn-hover);
+            background: #925cef;
         }
 
         .counter {
@@ -111,19 +65,11 @@
 </head>
 <body>
 
-
-    <div class="intro-screen" id="intro-screen">
-        <h1>Welcome! 👋</h1>
-        <p>Ready to test your luck? Jump right into the ultimate coin flip simulator.</p>
-        <button id="start-btn" type="button">Let's Play</button>
-    </div>
-
-
-    <main class="container" id="game-container">
+    <main class="container">
         <h1>Coin Flip</h1>
-        <div class="coin" id="coin">Ready</div>
+        <div class="coin" id="coin"></div>
         <button id="btn" type="button">Flip</button>
-        <p id="result" aria-live="polite"></p>
+        <p id="result"></p>
         
         <section class="counter">
             <div>Heads: <span id="heads-count">0</span></div>
@@ -132,53 +78,35 @@
     </main>
 
     <script>
+        const coin = document.getElementById("coin");
+        const btn = document.getElementById("btn");
+        const result = document.getElementById("result");
+        const headsCount = document.getElementById("heads-count");
+        const tailsCount = document.getElementById("tails-count");
 
-        const elements = {
-            introScreen: document.getElementById("intro-screen"),
-            gameContainer: document.getElementById("game-container"),
-            startBtn: document.getElementById("start-btn"),
-            btn: document.getElementById("btn"),
-            coin: document.getElementById("coin"),
-            result: document.getElementById("result"),
-            headsCount: document.getElementById("heads-count"),
-            tailsCount: document.getElementById("tails-count")
-        };
+        let heads = 0;
+        let tails = 0;
 
-        const state = {
-            heads: 0,
-            tails: 0
-        };
+        const headsImage = "url('https://i.ibb.co/ZzGDN07Z/watermarked-img-17780372074896846108.jpg')";
+        const tailsImage = "url('https://i.ibb.co/tpZd1d63/360-F-1391850-Uy96-QAl-My-Qg85-P9c4-Oda-YIXHfl-Mb4-W.png')";
 
+        coin.style.backgroundImage = headsImage;
 
-        elements.startBtn.addEventListener("click", () => {
-            elements.introScreen.classList.add("hidden");
-        });
+        btn.addEventListener("click", () => {
+            const isHeads = Math.random() < 0.5;
 
-        function getRandomOutcome() {
-            return Math.random() < 0.5 ? "Heads" : "Tails";
-        }
-
-
-        function updateUI(outcome) {
-            elements.coin.textContent = outcome;
-            elements.result.textContent = `It's ${outcome}!`;
-            elements.headsCount.textContent = state.heads;
-            elements.tailsCount.textContent = state.tails;
-        }
-
-
-        elements.btn.addEventListener("click", () => {
-
-
-            const outcome = getRandomOutcome();
-
-            if (outcome === "Heads") {
-                state.heads++;
+            if (isHeads) {
+                heads++;
+                coin.style.backgroundImage = headsImage;
+                result.textContent = "It's Heads!";
             } else {
-                state.tails++;
+                tails++;
+                coin.style.backgroundImage = tailsImage;
+                result.textContent = "It's Tails!";
             }
 
-            updateUI(outcome);
+            headsCount.textContent = heads;
+            tailsCount.textContent = tails;
         });
     </script>
 </body>
